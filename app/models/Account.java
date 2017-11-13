@@ -16,7 +16,6 @@ public class Account extends BaseModel<Account> {
     @Constraints.Email(message = "Email format is incorrect")
     private String email;
     @Column
-    @JsonIgnore
     @Constraints.Required(message = "Password field is required")
     private String password;
     @Enumerated(value = EnumType.STRING)

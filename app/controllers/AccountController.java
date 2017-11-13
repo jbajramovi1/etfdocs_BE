@@ -17,7 +17,7 @@ public class AccountController extends BaseController<Account, AccountService> {
      *
      * @return the result
      */
-    @Transactional(readOnly = true)
+    @Transactional
     public Result login() {
         try {
             Form<Account> form = formFactory.form(Account.class).bindFromRequest();

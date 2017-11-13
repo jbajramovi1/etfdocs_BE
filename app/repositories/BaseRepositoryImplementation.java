@@ -23,15 +23,14 @@ public class BaseRepositoryImplementation<M> implements BaseRepository<M> {
     /**
      * The Logger.
      */
-    @Inject
-    private JPAApi jpa;
+
     final Logger logger = LoggerFactory.getLogger(BaseRepositoryImplementation.class);
     private Class<M> getParameterizedClass() {
         return (Class<M>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
     }
 
     public M findById(Long id) {
-        return jpa.em().find(getParameterizedClass(), id);
+        return JPA.em().find(getParameterizedClass(), id);
     }
 
     /**
@@ -40,7 +39,7 @@ public class BaseRepositoryImplementation<M> implements BaseRepository<M> {
      * @return the base criteria
      */
     protected Criteria getBaseCriteria() {
-        Session session = ((HibernateEntityManager) jpa.em()).getSession();
+        Session session = ((HibernateEntityManager) JPA.em()).getSession();
         return session.createCriteria(getParameterizedClass().getClass());
     }
 
@@ -50,13 +49,13 @@ public class BaseRepositoryImplementation<M> implements BaseRepository<M> {
      * @return the session
      */
     public Session getSession() {
-        return jpa.em().unwrap(Session.class);
+        return JPA.em().unwrap(Session.class);
     }
 
     public void create(M model) throws RepositoryException {
         try {
-            jpa.em().persist(model);
-            jpa.em().flush();
+            JPA.em().persist(model);
+            JPA.em().flush();
         } catch (PersistenceException e) {
             logger.error("ServiceException in BaseRepository@create", e);
             throw new RepositoryException(e.toString());
@@ -65,8 +64,8 @@ public class BaseRepositoryImplementation<M> implements BaseRepository<M> {
 
     public void update(M model) throws RepositoryException {
         try {
-            jpa.em().merge(model);
-            jpa.em().flush();
+            JPA.em().merge(model);
+            JPA.em().flush();
         } catch (PersistenceException e) {
             logger.error("ServiceException in BaseRepository@update", e);
             throw new RepositoryException(e.toString());
@@ -75,8 +74,8 @@ public class BaseRepositoryImplementation<M> implements BaseRepository<M> {
 
     public void delete(M model) throws RepositoryException {
         try {
-            jpa.em().remove(model);
-            jpa.em().flush();
+            JPA.em().remove(model);
+            JPA.em().flush();
         } catch (PersistenceException e) {
             logger.error("ServiceException in BaseRepository@delete", e);
             throw new RepositoryException(e.toString());
